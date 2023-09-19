@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,7 +20,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'first_name',
+        'last_name',
         'email',
+        'phone',
+        'username',
         'password',
     ];
 
@@ -42,4 +47,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function findForPassport($identifier)
+    {
+        return $this->orWhere('email', $identifier)
+            ->orWhere('phone', $identifier)
+            ->orWhere('username', $identifier)
+            ->first();
+    }
+
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: function (mixed $value, array $attrs) {
+                $full = [
+                    isset($attrs['first_name']) ? $attrs['first_name'] : '',
+                    isset($attrs['last_name']) ? $attrs['last_name'] : ''
+                ];
+                return implode(" ", $full);
+            },
+        );
+    }
 }
