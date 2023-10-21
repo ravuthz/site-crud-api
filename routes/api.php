@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SettingTypeController;
+use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +37,4 @@ Route::apiResource('setting-types', SettingTypeController::class);
 Route::apiResource('settings', SettingController::class);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('articles', ArticleController::class);
+Route::apiResource('tags', TagController::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TagUpdateRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class TagUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,8 @@ class TagUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'slug' => ['required', 'string', Rule::unique('tags', 'slug')->ignore($this['tag'])],
+            'name' => ['required', 'string'],
         ];
     }
 }
