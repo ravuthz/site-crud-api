@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\SettingTypeController;
 use App\Http\Controllers\Api\TagController;
@@ -38,3 +39,4 @@ Route::apiResource('settings', SettingController::class);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('articles', ArticleController::class);
 Route::apiResource('tags', TagController::class);
+Route::apiResource('comments', CommentController::class);
