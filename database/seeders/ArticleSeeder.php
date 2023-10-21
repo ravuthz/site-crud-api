@@ -12,6 +12,8 @@ class ArticleSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Category::factory()->count(10)->create()->each(function ($category) {
+            Article::factory()->count(5)->create(['category_id' => $category->id]);
+        });
     }
 }

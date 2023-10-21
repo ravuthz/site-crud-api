@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\SettingController;
@@ -34,3 +35,4 @@ Route::apiResource('users', UserController::class);
 Route::apiResource('setting-types', SettingTypeController::class);
 Route::apiResource('settings', SettingController::class);
 Route::apiResource('categories', CategoryController::class);
+Route::apiResource('articles', ArticleController::class);
