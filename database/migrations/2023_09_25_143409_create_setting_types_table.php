@@ -11,16 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('setting_types', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('email')->nullable()->unique();
-            $table->string('phone')->nullable()->unique();
-            $table->string('username')->nullable()->unique();
-            $table->string('password')->nullable();
-            $table->rememberToken();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string("name");
+            $table->string("desc");
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('created_by')->nullable();
@@ -34,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('setting_types');
     }
 };

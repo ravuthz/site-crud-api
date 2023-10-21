@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\SettingTypeController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +28,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('user', [AuthController::class, 'user'])->name('auth.user');
     Route::get('logout', [AuthController::class, 'logout'])->name('auth.logout');
 });
+
+Route::apiResource('users', UserController::class);
+Route::apiResource('setting-types', SettingTypeController::class);
+Route::apiResource('settings', SettingController::class);

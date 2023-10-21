@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Crud\CrudAuditActions;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -12,6 +13,7 @@ use Laravel\Passport\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    use CrudAuditActions;
 
     /**
      * The attributes that are mass assignable.
@@ -61,8 +63,8 @@ class User extends Authenticatable
         return Attribute::make(
             get: function (mixed $value, array $attrs) {
                 $full = [
-                    isset($attrs['first_name']) ? $attrs['first_name'] : '',
-                    isset($attrs['last_name']) ? $attrs['last_name'] : ''
+                    $attrs['first_name'] ?? '',
+                    $attrs['last_name'] ?? ''
                 ];
                 return implode(" ", $full);
             },
