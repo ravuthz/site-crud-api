@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
+            $table->string('type')->nullable();
+            $table->string('name')->nullable();
+            $table->string('size')->nullable();
+            $table->string('mime')->nullable();
+            $table->text('path')->nullable();
+            $table->string('original_name')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+            $table->foreignId('created_by')->nullable();
+            $table->foreignId('updated_by')->nullable();
+            $table->foreignId('deleted_by')->nullable();
         });
     }
 

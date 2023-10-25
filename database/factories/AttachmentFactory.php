@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Setting;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,12 @@ class AttachmentFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'type' => $this->faker->slug,
+            'name' => $this->faker->slug,
+            'size' => $this->faker->numberBetween(0, 10),
+            'mime' => $this->faker->slug,
+            'path' => $this->faker->text,
+            'original_name' => $this->faker->word,
         ];
     }
 }

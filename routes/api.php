@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ArticleController;
+use App\Http\Controllers\Api\AttachmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CommentController;
@@ -40,3 +41,4 @@ Route::apiResource('categories', CategoryController::class);
 Route::apiResource('articles', ArticleController::class);
 Route::apiResource('tags', TagController::class);
 Route::apiResource('comments', CommentController::class);
+Route::apiResource('attachments', AttachmentController::class);

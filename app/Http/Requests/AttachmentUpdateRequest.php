@@ -11,7 +11,7 @@ class AttachmentUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class AttachmentUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'type' => ['required', 'string'],
+            'name' => ['required', 'string'],
+            'mime' => ['nullable', 'string'],
+            'size' => ['nullable', 'integer'],
+            'path' => ['nullable','string'],
+            'original_name' => ['nullable', 'string'],
         ];
     }
 }
