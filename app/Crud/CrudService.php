@@ -4,27 +4,35 @@ namespace App\Crud;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Log;
 
 class CrudService
 {
     private Model|null $model;
     private string|null $resource;
+    private string|null $collection;
     private string|null $storeRequest;
     private string|null $updateRequest;
 
-    public function __construct(string $model, $storeRequest = null, $updateRequest = null, $resource = null)
-    {
-        $this->setModel($model);
-        $this->setResource($resource);
-        $this->storeRequest = $storeRequest;
-        $this->updateRequest = $updateRequest;
-    }
+    private $findOneFn;
+    private $findAllFn;
+    private $saveFn;
 
-    public function setModel($model): static
+    public function __construct(string $model, $storeRequest = null, $updateRequest = null, $resource = null, $collection = null)
     {
         $this->model = app($model);
-        return $this;
+        $this->resource = $resource;
+        $this->collection = $collection;
+        $this->storeRequest = $storeRequest;
+        $this->updateRequest = $updateRequest;
+
+        $this->overrideFindOne(fn ($id) => !$id ? $this->getModel() : $this->getModel()->findOrFail($id));
+        $this->overrideFindAll(fn ($request) => $this->getModel()->paginate($request->get('size', 10)));
+        $this->overrideSave(function ($request, $id = null) {
+            $data = $this->findOne($id)->fill($request->all());
+            $data->save();
+            return $data;
+        });
     }
 
     public function getModel(): Model
@@ -32,34 +40,44 @@ class CrudService
         return $this->model;
     }
 
-    public function setResource($resource): static
-    {
-        $this->resource = $resource;
-        return $this;
-    }
-
     public function save($request, $id = null)
     {
-        $data = $this->findOne($id);
-        $data->fill($request->all())->save();
-        return $data;
+        return call_user_func($this->saveFn, $request, $id);
     }
 
     public function findOne($id = null)
     {
-        return !$id ? $this->getModel() : $this->getModel()->findOrFail($id);
+        return call_user_func($this->findOneFn, $id);
     }
 
     public function findAll(Request $request)
     {
-        $param = $request->get('size', 10);
-        Log::debug("fetchList: ", $request->all());
-        return $this->getModel()->paginate($param);
+        return call_user_func($this->findAllFn, $request);
+    }
+
+    public function overrideFindOne(callable $callback)
+    {
+        $this->findOneFn = $callback;
+        return $this;
+    }
+
+    public function overrideFindAll(callable $callback)
+    {
+        $this->findAllFn = $callback;
+        return $this;
+    }
+
+    public function overrideSave(callable $callback)
+    {
+        $this->saveFn = $callback;
+        return $this;
     }
 
     public function responseList($data, $status = 200, $message = 'Successfully'): mixed
     {
-        if ($this->resource) {
+        if ($this->collection) {
+            return $this->collection::make($data);
+        } else if ($this->resource) {
             return $this->resource::collection($data);
         }
         return response()->json(['data' => $data, 'status' => $status, 'message' => $message]);
@@ -75,28 +93,25 @@ class CrudService
 
     public function index(Request $request): mixed
     {
-        $item = $this->findAll($request);
-        return $this->responseList($item, 200);
+        $data = $this->findAll($request);
+        return $this->responseList($data, 200);
     }
 
     public function show($id): mixed
     {
-        $item = $this->findOne($id);
-        return $this->responseItem($item, 200);
+        $data = $this->findOne($id);
+        return $this->responseItem($data, 200);
     }
 
     public function store($request)
     {
-
-
         $data = $this->save($this->storeRequest ? app($this->storeRequest) : $request);
-
         return $this->responseItem($data);
     }
 
     public function update($request, $id)
     {
-        $data = $this->save($this->storeRequest ?  app($this->updateRequest) : $request, $id);
+        $data = $this->save($this->updateRequest ?  app($this->updateRequest) : $request, $id);
         return $this->responseItem($data);
     }
 
@@ -105,5 +120,4 @@ class CrudService
         $this->findOne($id)->delete();
         return $this->responseItem(null);
     }
-
 }
