@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-//use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Setting;
 use App\Models\SettingType;
 use Illuminate\Database\Seeder;
@@ -22,19 +21,19 @@ class SettingSeeder extends Seeder
         Setting::create([
             'type_id' => $articleType->id,
             'name' => 'Page',
-            'desc' => 'Promote Article to Static or Dynamic Page'
+            'desc' => 'The group of pages like about, contact, ...etc and include static pages'
         ]);
 
         Setting::create([
             'type_id' => $articleType->id,
-            'name' => 'Page',
-            'desc' => 'Promote Article to Static or Dynamic Page'
+            'name' => 'Post',
+            'desc' => 'The group of posts or articles like news, articles, ...etc'
         ]);
 
         Setting::create([
             'type_id' => $articleType->id,
-            'name' => 'Page',
-            'desc' => 'Promote Article to Static or Dynamic Page'
+            'name' => 'Ads',
+            'desc' => 'The group of advertisements like banners, videos, ...etc'
         ]);
     }
 }

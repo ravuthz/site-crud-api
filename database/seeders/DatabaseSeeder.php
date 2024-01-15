@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,8 +19,21 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        // Artisan::call('passport:install --uuids');
+        // dd(Artisan::output());
+
         $this->call([
-            SettingSeeder::class
+            SettingSeeder::class,
+            ArticleSeeder::class,
+        ]);
+
+        User::create([
+            "first_name" => "Zee",
+            "last_name" => "Admin",
+            "phone" => "0964577770",
+            "email" => "adminz@gmail.com",
+            "username" => "adminz",
+            "password" => bcrypt('123123')
         ]);
     }
 }

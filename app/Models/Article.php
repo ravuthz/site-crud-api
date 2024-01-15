@@ -29,4 +29,9 @@ class Article extends Model
     {
         return $this->belongsTo(Setting::class);
     }
+
+    public function scopeWhereHasType($query, $type)
+    {
+        return $query->whereHas('type', fn ($q) => $q->where('name', $type));
+    }
 }

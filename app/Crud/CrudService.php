@@ -29,7 +29,7 @@ class CrudService
         $this->overrideFindOne(fn ($id) => !$id ? $this->getModel() : $this->getModel()->findOrFail($id));
         $this->overrideFindAll(fn ($request) => $this->getModel()->paginate($request->get('size', 10)));
         $this->overrideSave(function ($request, $id = null) {
-            $data = $this->findOne($id)->fill($request->all());
+            $data = $this->findOne($id, $request)->fill($request->all());
             $data->save();
             return $data;
         });
@@ -45,9 +45,9 @@ class CrudService
         return call_user_func($this->saveFn, $request, $id);
     }
 
-    public function findOne($id = null)
+    public function findOne($id = null, Request $request)
     {
-        return call_user_func($this->findOneFn, $id);
+        return call_user_func($this->findOneFn, $id, $request);
     }
 
     public function findAll(Request $request)

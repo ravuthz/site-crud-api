@@ -21,5 +21,17 @@ class ArticleController extends Controller
             ArticleUpdateRequest::class,
             ArticleResource::class
         );
+
+        $this->service->overrideFindAll(function ($request) {
+            return $this->service->getModel()
+                ->whereHasType($request->get('type', 'Post'))
+                ->paginate($request->get('size', 10));
+        });
+
+        $this->service->overrideFindOne(function ($id, $request) {
+            return $this->service->getModel()
+                ->whereHasType($request->get('type', 'Post'))
+                ->findOrFail($id);
+        });
     }
 }

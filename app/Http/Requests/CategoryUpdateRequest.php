@@ -27,11 +27,11 @@ class CategoryUpdateRequest extends FormRequest
             'depth' => ['nullable', 'integer'],
             'slug' => ['required', 'string', Rule::unique('categories', 'slug')->ignore($this['category'])],
             'title' => ['required', 'string'],
-            'excerpt' => ['string'],
-            'content' => ['string'],
-            'image' => ['string'],
-            'status' => ['string'],
-            'options' => ['array'],
+            'excerpt' => ['nullable', 'string'],
+            'content' => ['nullable', 'string'],
+            'image' => ['nullable', 'string'],
+            'status' => ['nullable', 'string'],
+            'options' => ['nullable', 'array'],
         ];
     }
 }
